@@ -12,7 +12,7 @@
 	"author": "Chester Alejandro",
 	"type": "commonjs",
 	"scripts": {
-		"dev": "node src/app.js"
+		"dev": "node src/server.js"
 	},
 	"dependencies": {
 		"express": "^5.2.1"
