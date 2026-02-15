@@ -13,5 +13,8 @@
 	"type": "commonjs",
 	"scripts": {
 		"dev": "node src/app.js"
+	},
+	"dependencies": {
+		"express": "^5.2.1"
 	}
 }
