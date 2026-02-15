@@ -1,4 +1,5 @@
 const express = require('express');
+const mng = require('mongodb');
 
 const app = express();
 
@@ -59,8 +60,8 @@ app.get('/', (req, res) => {
 	res.send(homepageHTML);
 });
 
-app.post('/create-item', (req, res) => {
-	console.log(req.body.item);
+app.post('/create-item', async (req, res) => {
+	await db.collection('items').insertOne({ text: req.body.item });
 	return res.send('Thanks for submitting the form.');
 });
 
