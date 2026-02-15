@@ -1,7 +1,16 @@
 const express = require('express');
-const mng = require('mongodb');
+const { MongoClient } = require('mongodb');
 
 const app = express();
+
+async function connect() {
+	const client = new MongoClient(
+		'mongodb+srv://userChester:<db_password>@free-tutorial-cluster.xqk44sl.mongodb.net/TodoApp?appName=Free-Tutorial-Cluster',
+	);
+	await client.connect();
+
+	const db = client.db();
+}
 
 app.use(express.urlencoded({ extended: false }));
 
