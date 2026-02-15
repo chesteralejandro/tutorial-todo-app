@@ -1,0 +1,17 @@
+{
+	"name": "todo_app",
+	"version": "1.0.0",
+	"description": "A full-stack todo application built with Node.js, Express, and MongoDB.",
+	"keywords": [
+		"todo",
+		"node",
+		"express"
+	],
+	"private": true,
+	"license": "MIT",
+	"author": "Chester Alejandro",
+	"type": "commonjs",
+	"scripts": {
+		"dev": "node src/app.js"
+	}
+}
