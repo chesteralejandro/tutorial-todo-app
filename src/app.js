@@ -2,15 +2,23 @@ const express = require('express');
 const { MongoClient } = require('mongodb');
 
 const app = express();
+let db;
 
 async function connect() {
-	const client = new MongoClient(
-		'mongodb+srv://userChester:<db_password>@free-tutorial-cluster.xqk44sl.mongodb.net/TodoApp?appName=Free-Tutorial-Cluster',
-	);
-	await client.connect();
+	try {
+		const client = new MongoClient(
+			`mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@free-tutorial-cluster.xqk44sl.mongodb.net/${process.env.DATABASE_NAME}?appName=Free-Tutorial-Cluster&retryWrites=true&w=majority`,
+		);
+		await client.connect();
+		console.log('SUCCESSFULLY CONNECTED');
 
-	const db = client.db();
+		db = client.db();
+	} catch (error) {
+		console.log(error.message);
+	}
 }
+
+connect();
 
 app.use(express.urlencoded({ extended: false }));
 
@@ -64,7 +72,7 @@ app.get('/', (req, res) => {
         </div>
         
         </body>
-    </html>`;
+        </html>`;
 
 	res.send(homepageHTML);
 });
