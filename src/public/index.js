@@ -1,35 +1,46 @@
-const listGroup = document.querySelector('ul.list-group');
+const editButtons = document.querySelectorAll('.edit-button');
+const deleteButtons = document.querySelectorAll('.delete-button');
 
-listGroup.addEventListener('click', async (event) => {
-	const element = event.target;
-
-	try {
-		validateElement(element);
-
-		const listItem = element.parentElement.parentElement;
+editButtons.forEach((editButton) => {
+	editButton.addEventListener('click', async () => {
+		const listItem = editButton.parentElement.parentElement;
 		const span = listItem.querySelector('.item-text');
 
 		const userInput = prompt('Enter Your New Text', span.innerText);
-		const itemId = element.getAttribute('data-item-id');
+		const itemId = editButton.getAttribute('data-item-id');
 
-		validateInputText(userInput);
+		try {
+			validateInputText(userInput);
 
-		await axios.post('/update-item', { text: userInput, id: itemId });
+			await axios.post('/update-item', { text: userInput, id: itemId });
 
-		runOptimisticUpdate(span, userInput);
-	} catch (error) {
-		console.warn(error.message);
-	}
+			runOptimisticUpdate(span, userInput);
+		} catch (error) {
+			console.warn(error.message);
+		}
+	});
 });
 
-function validateElement(element) {
-	const editButtonClass = 'edit-me';
-	const isNotEditButton = !element.classList.contains(editButtonClass);
+deleteButtons.forEach((deleteButton) => {
+	deleteButton.addEventListener('click', async (event) => {
+		const listItem = deleteButton.parentElement.parentElement;
+		const itemId = deleteButton.getAttribute('data-item-id');
 
-	if (isNotEditButton) {
-		throw new Error('Element is not the edit button.');
-	}
-}
+		const userResponse = confirm(
+			'Do you really want to delete this item permanently?',
+		);
+
+		try {
+			validateConfirmation(userResponse);
+
+			await axios.post('/delete-item', { id: itemId });
+
+			runItemDeletion(listItem);
+		} catch (error) {
+			console.warn(error.message);
+		}
+	});
+});
 
 function validateInputText(inputText) {
 	const isInputEmpty = !inputText;
@@ -39,6 +50,16 @@ function validateInputText(inputText) {
 	}
 }
 
+function validateConfirmation(isItemDeleting) {
+	if (!isItemDeleting) {
+		throw new Error('Item deleting process cancelled.');
+	}
+}
+
 function runOptimisticUpdate(element, newText) {
 	element.innerText = newText;
+}
+
+function runItemDeletion(element) {
+	element.remove();
 }
