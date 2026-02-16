@@ -6,7 +6,9 @@ const app = express();
 
 app.use(express.urlencoded({ extended: false }));
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
+	const items = await mongodb.itemsCollection.find().toArray();
+
 	const homepageHTML = `
         <!DOCTYPE html>
         <html>
@@ -17,44 +19,31 @@ app.get('/', (req, res) => {
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
         </head>
         <body>
-        <div class="container">
-            <h1 class="display-4 text-center py-1">To-Do App</h1>
-            
-            <div class="jumbotron p-3 shadow-sm">
-            <form action="/create-item" method="POST">
-                <div class="d-flex align-items-center">
-                <input name="item" autofocus autocomplete="off" class="form-control mr-3" type="text" style="flex: 1;">
-                <button class="btn btn-primary">Add New Item</button>
+            <div class="container">
+                <h1 class="display-4 text-center py-1">To-Do App</h1>
+                <div class="jumbotron p-3 shadow-sm">
+                    <form action="/create-item" method="POST">
+                        <div class="d-flex align-items-center">
+                        <input name="item" autofocus autocomplete="off" class="form-control mr-3" type="text" style="flex: 1;">
+                        <button class="btn btn-primary">Add New Item</button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+                <ul class="list-group pb-5">
+                ${items
+					.map(
+						(item) => `
+                    <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
+                        <span class="item-text">${item.text}</span>
+                        <div>
+                        <button class="edit-me btn btn-secondary btn-sm mr-1">Edit</button>
+                        <button class="delete-me btn btn-danger btn-sm">Delete</button>
+                        </div>
+                    </li>`,
+					)
+					.join('')}
+                </ul>
             </div>
-            
-            <ul class="list-group pb-5">
-            <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
-                <span class="item-text">Fake example item #1</span>
-                <div>
-                <button class="edit-me btn btn-secondary btn-sm mr-1">Edit</button>
-                <button class="delete-me btn btn-danger btn-sm">Delete</button>
-                </div>
-            </li>
-            <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
-                <span class="item-text">Fake example item #2</span>
-                <div>
-                <button class="edit-me btn btn-secondary btn-sm mr-1">Edit</button>
-                <button class="delete-me btn btn-danger btn-sm">Delete</button>
-                </div>
-            </li>
-            <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
-                <span class="item-text">Fake example item #3</span>
-                <div>
-                <button class="edit-me btn btn-secondary btn-sm mr-1">Edit</button>
-                <button class="delete-me btn btn-danger btn-sm">Delete</button>
-                </div>
-            </li>
-            </ul>
-            
-        </div>
-        
         </body>
         </html>`;
 
@@ -63,7 +52,7 @@ app.get('/', (req, res) => {
 
 app.post('/create-item', async (req, res) => {
 	await mongodb.itemsCollection.insertOne({ text: req.body.item });
-	return res.send('Thanks for submitting the form.');
+	return res.redirect('/');
 });
 
 module.exports = app;
