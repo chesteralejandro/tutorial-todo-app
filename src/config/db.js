@@ -1,5 +1,6 @@
 const { MongoClient } = require('mongodb');
-const chalk = require('chalk').default;
+
+const logger = require('../utils/chalkLogger.js');
 
 const { DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME } = process.env;
 
@@ -16,9 +17,7 @@ class Database {
 			const client = new MongoClient(DATABASE_URI);
 			await client.connect();
 
-			console.log(
-				chalk.bgGreen.whiteBright('Success! Database is Connected.'),
-			);
+			logger.success('Success! Database is Connected.');
 
 			this.itemsCollection = client
 				.db()

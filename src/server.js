@@ -2,7 +2,7 @@ const http = require('node:http');
 
 const app = require('./app.js');
 const mongodb = require('./config/db.js');
-const { default: chalk } = require('chalk');
+const logger = require('./utils/chalkLogger.js');
 
 const PORT = process.env.PORT || 3000;
 
@@ -13,16 +13,11 @@ async function startServer() {
 		await mongodb.connect();
 
 		server.listen(PORT, () => {
-			console.log(
-				chalk.bgGreen.whiteBright('Success! Server is Listening.'),
-			);
-			console.log(
-				'Follow link:',
-				chalk.blueBright(`http://localhost:${PORT}`),
-			);
+			logger.success('Success! Server is Listening.');
+			logger.customLink('Follow link:', `http://localhost:${PORT}`);
 		});
 	} catch (error) {
-		console.error(error.message);
+		logger.error(error.message);
 	}
 }
 
