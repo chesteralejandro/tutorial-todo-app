@@ -1,4 +1,8 @@
-# Dev Log
+# Development Log
+
+## Documentations Nav
+
+[Read Me](/README.md) | [Development Log](/docs/dev-log.md) | [Learning Notes](/docs/learning-notes.md)
 
 ## Installation Commands
 

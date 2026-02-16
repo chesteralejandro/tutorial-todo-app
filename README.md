@@ -2,9 +2,9 @@
 
 > This is a tutorial application from Brad Schiff. This is an application that will let you list down all your tasks.
 
-## 🚀 Preview
+## Documentations Nav
 
-Live demo: Coming soon...
+[Read Me](/README.md) | [Development Log](/docs/dev-log.md) | [Learning Notes](/docs/learning-notes.md)
 
 ## 🏅 Purpose
 
