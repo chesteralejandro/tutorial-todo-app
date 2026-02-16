@@ -26,14 +26,14 @@ app.get('/', async (req, res) => {
             <div class="container">
                 <h1 class="display-4 text-center py-1">To-Do App</h1>
                 <div class="jumbotron p-3 shadow-sm">
-                    <form action="/create-item" method="POST">
+                    <form id="create-form" action="/create-item" method="POST">
                         <div class="d-flex align-items-center">
-                        <input name="item" autofocus autocomplete="off" class="form-control mr-3" type="text" style="flex: 1;">
-                        <button class="btn btn-primary">Add New Item</button>
+                            <input id="create-input" name="item" autofocus autocomplete="off" class="form-control mr-3" type="text" style="flex: 1;">
+                            <button class="btn btn-primary">Add New Item</button>
                         </div>
                     </form>
                 </div>
-                <ul class="list-group pb-5">
+                <ul id="items-list" class="list-group pb-5">
                 ${items
 					.map(
 						(item) => `
@@ -57,8 +57,11 @@ app.get('/', async (req, res) => {
 });
 
 app.post('/create-item', async (req, res) => {
-	await mongodb.itemsCollection.insertOne({ text: req.body.item });
-	return res.redirect('/');
+	const { text } = req.body;
+
+	const item = await mongodb.itemsCollection.insertOne({ text });
+
+	return res.json({ _id: item.insertedId, text });
 });
 
 app.post('/update-item', async (req, res) => {
