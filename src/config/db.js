@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 
 const logger = require('../utils/chalkLogger.js');
 
@@ -25,6 +25,10 @@ class Database {
 		} catch (error) {
 			throw new Error(error);
 		}
+	}
+
+	getIdFormat(id) {
+		return new ObjectId(id);
 	}
 }
 

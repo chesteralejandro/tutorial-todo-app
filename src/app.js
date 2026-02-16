@@ -1,9 +1,13 @@
+const path = require('node:path');
+
 const express = require('express');
 
 const mongodb = require('./config/db.js');
 
 const app = express();
 
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.get('/', async (req, res) => {
@@ -36,7 +40,7 @@ app.get('/', async (req, res) => {
                     <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
                         <span class="item-text">${item.text}</span>
                         <div>
-                        <button class="edit-me btn btn-secondary btn-sm mr-1">Edit</button>
+                        <button data-item-id="${item._id}" class="edit-me btn btn-secondary btn-sm mr-1">Edit</button>
                         <button class="delete-me btn btn-danger btn-sm">Delete</button>
                         </div>
                     </li>`,
@@ -44,6 +48,8 @@ app.get('/', async (req, res) => {
 					.join('')}
                 </ul>
             </div>
+            <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+            <script src="/index.js"></script>
         </body>
         </html>`;
 
@@ -53,6 +59,21 @@ app.get('/', async (req, res) => {
 app.post('/create-item', async (req, res) => {
 	await mongodb.itemsCollection.insertOne({ text: req.body.item });
 	return res.redirect('/');
+});
+
+app.post('/update-item', async (req, res) => {
+	const { text, id } = req.body;
+
+	const formattedId = mongodb.getIdFormat(id);
+
+	await mongodb.itemsCollection.findOneAndUpdate(
+		{ _id: formattedId },
+		{
+			$set: { text },
+		},
+	);
+
+	res.send('Success');
 });
 
 module.exports = app;
