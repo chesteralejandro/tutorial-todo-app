@@ -1,24 +1,8 @@
 const express = require('express');
-const { MongoClient } = require('mongodb');
+
+const mongodb = require('./config/db.js');
 
 const app = express();
-let db;
-
-async function connect() {
-	try {
-		const client = new MongoClient(
-			`mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@free-tutorial-cluster.xqk44sl.mongodb.net/${process.env.DATABASE_NAME}?appName=Free-Tutorial-Cluster&retryWrites=true&w=majority`,
-		);
-		await client.connect();
-		console.log('SUCCESSFULLY CONNECTED');
-
-		db = client.db();
-	} catch (error) {
-		console.log(error.message);
-	}
-}
-
-connect();
 
 app.use(express.urlencoded({ extended: false }));
 
@@ -78,7 +62,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/create-item', async (req, res) => {
-	await db.collection('items').insertOne({ text: req.body.item });
+	await mongodb.itemsCollection.insertOne({ text: req.body.item });
 	return res.send('Thanks for submitting the form.');
 });
 
