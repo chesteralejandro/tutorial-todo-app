@@ -37,6 +37,10 @@ function sanitizeHTMLText(req, _, next) {
 
 app.use(protectWithPassword);
 
+app.get('/test', (_, res) => {
+	res.send('Server works!');
+});
+
 app.get('/read-items', async (_, res) => {
 	const items = await mongodb.itemsCollection.find().toArray();
 
