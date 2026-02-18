@@ -12,9 +12,8 @@ async function startServer() {
 	try {
 		await mongodb.connect();
 
-		server.listen(PORT, () => {
+		server.listen(PORT, '0.0.0.0', () => {
 			logger.success('Success! Server is Listening.');
-			logger.customLink('Follow link:', `http://localhost:${PORT}`);
 		});
 	} catch (error) {
 		logger.error(error.message);
