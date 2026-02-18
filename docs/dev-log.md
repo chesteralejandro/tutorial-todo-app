@@ -1,8 +1,10 @@
 # Development Log
 
-## Documentations Nav
+## 📝 Documentations
 
-[Read Me](/README.md) | [Development Log](/docs/dev-log.md) | [Learning Notes](/docs/learning-notes.md)
+- [Read Me](/README.md)
+- [Development Log](/docs/dev-log.md)
+- [Learning Notes](/docs/learning-notes.md)
 
 ## Installation Commands
 
@@ -26,5 +28,3 @@
 - **Bug:** MongoDB Authentication failed
 - **Cause:** Wrong password or password not URL compatible
 - **Fix:** Changed password to simple one
-
----
