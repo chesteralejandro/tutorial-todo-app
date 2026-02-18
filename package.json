@@ -12,6 +12,7 @@
 	"author": "Chester Alejandro",
 	"type": "commonjs",
 	"scripts": {
+		"start": "node src/server.js",
 		"dev": "nodemon -r dotenv/config src/server.js"
 	},
 	"dependencies": {
