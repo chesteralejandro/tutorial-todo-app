@@ -2,9 +2,14 @@ const createForm = document.querySelector('#create-form');
 const createInput = document.querySelector('#create-input');
 const itemsList = document.querySelector('#items-list');
 
-window.addEventListener('load', () => {
-	const HTMLString = items.map((item) => getListItemTemplate(item)).join('');
-	runReadOptimisticUpdate(HTMLString);
+window.addEventListener('load', async () => {
+	const response = await axios.get('/read-items');
+	const items = response.data.items;
+	let htmlString = '';
+
+	items.forEach((item) => (htmlString += getListItemHTMLTemplate(item)));
+
+	runReadOptimisticUpdate(htmlString);
 });
 
 createForm.addEventListener('submit', async (event) => {
@@ -92,7 +97,7 @@ function validateConfirmation(isItemDeleting) {
 	}
 }
 
-function getListItemTemplate(item) {
+function getListItemHTMLTemplate(item) {
 	return `
          <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
             <span class="item-text">${item.text}</span>
@@ -117,7 +122,7 @@ function runReadOptimisticUpdate(htmlTemplate) {
 }
 
 function runCreateOptimisticUpdate(item) {
-	itemsList.insertAdjacentHTML('beforeend', getListItemTemplate(item));
+	itemsList.insertAdjacentHTML('beforeend', getListItemHTMLTemplate(item));
 
 	hydrateEditButtons();
 	hydrateDeleteButtons();
