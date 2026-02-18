@@ -15,6 +15,10 @@
 - `npm install mongodb` Database for permanent data storage
 - `npm install -D dotenv` Environment secrets
 
+### 2026-02-18
+
+- `npm install sanitize-html` Strip off any HTML from the user input value
+
 ## Error Debugging
 
 ### 2026-02-16

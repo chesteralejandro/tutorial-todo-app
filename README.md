@@ -30,7 +30,11 @@ This project was built to practice:
 
 ## ⚙️ Setup & Installation
 
-Coming soon...
+After cloning the repo `https://github.com/chesteralejandro/tutorial-todo-app.git`
+
+1. Install dependencies: `npm install`
+2. Create a `.env` file in the root folder. Add all necessary values.
+3. Run the app for development: `npm run dev`
 
 ## 📸 Screenshot
 
