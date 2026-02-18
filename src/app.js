@@ -1,6 +1,7 @@
 const path = require('node:path');
 
 const express = require('express');
+const sanitizeHTML = require('sanitize-html');
 
 const mongodb = require('./config/db.js');
 
@@ -22,9 +23,21 @@ function protectWithPassword(req, res, next) {
 	next();
 }
 
+function sanitizeHTMLText(req, _, next) {
+	const { text } = req.body;
+
+	const safeText = sanitizeHTML(text, {
+		allowedTags: [],
+		allowedAttributes: {},
+	});
+
+	req.body.text = safeText;
+	next();
+}
+
 app.use(protectWithPassword);
 
-app.get('/', async (req, res) => {
+app.get('/', async (_, res) => {
 	const items = await mongodb.itemsCollection.find().toArray();
 
 	const homepageHTML = `
@@ -60,7 +73,7 @@ app.get('/', async (req, res) => {
 	res.send(homepageHTML);
 });
 
-app.post('/create-item', async (req, res) => {
+app.post('/create-item', sanitizeHTMLText, async (req, res) => {
 	const { text } = req.body;
 
 	const item = await mongodb.itemsCollection.insertOne({ text });
@@ -68,7 +81,7 @@ app.post('/create-item', async (req, res) => {
 	return res.json({ _id: item.insertedId, text });
 });
 
-app.post('/update-item', async (req, res) => {
+app.post('/update-item', sanitizeHTMLText, async (req, res) => {
 	const { text, id } = req.body;
 
 	const formattedId = mongodb.getIdFormat(id);
