@@ -1,12 +1,10 @@
 const createForm = document.querySelector('#create-form');
 const createInput = document.querySelector('#create-input');
 const itemsList = document.querySelector('#items-list');
-const editButtons = document.querySelectorAll('.edit-button');
-const deleteButtons = document.querySelectorAll('.delete-button');
 
 window.addEventListener('load', () => {
-	hydrateEditButtons();
-	hydrateDeleteButtons();
+	const HTMLString = items.map((item) => getListItemTemplate(item)).join('');
+	runReadOptimisticUpdate(HTMLString);
 });
 
 createForm.addEventListener('submit', async (event) => {
@@ -29,6 +27,8 @@ createForm.addEventListener('submit', async (event) => {
 });
 
 function hydrateEditButtons() {
+	const editButtons = document.querySelectorAll('.edit-button');
+
 	editButtons.forEach((editButton) => {
 		editButton.addEventListener('click', async () => {
 			const listItem = editButton.parentElement.parentElement;
@@ -54,6 +54,8 @@ function hydrateEditButtons() {
 }
 
 function hydrateDeleteButtons() {
+	const deleteButtons = document.querySelectorAll('.delete-button');
+
 	deleteButtons.forEach((deleteButton) => {
 		deleteButton.addEventListener('click', async (event) => {
 			const listItem = deleteButton.parentElement.parentElement;
@@ -105,6 +107,13 @@ function getListItemTemplate(item) {
 function runInputReset() {
 	createInput.value = '';
 	createInput.focus();
+}
+
+function runReadOptimisticUpdate(htmlTemplate) {
+	itemsList.insertAdjacentHTML('beforeend', htmlTemplate);
+
+	hydrateEditButtons();
+	hydrateDeleteButtons();
 }
 
 function runCreateOptimisticUpdate(item) {

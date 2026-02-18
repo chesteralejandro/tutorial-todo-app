@@ -33,21 +33,11 @@ app.get('/', async (req, res) => {
                         </div>
                     </form>
                 </div>
-                <ul id="items-list" class="list-group pb-5">
-                ${items
-					.map(
-						(item) => `
-                    <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
-                        <span class="item-text">${item.text}</span>
-                        <div>
-                        <button data-item-id="${item._id}" class="edit-button btn btn-secondary btn-sm mr-1">Edit</button>
-                        <button data-item-id="${item._id}" class="delete-button btn btn-danger btn-sm">Delete</button>
-                        </div>
-                    </li>`,
-					)
-					.join('')}
-                </ul>
+                <ul id="items-list" class="list-group pb-5"></ul>
             </div>
+            <script>
+                    const items = ${JSON.stringify(items)};
+            </script>
             <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
             <script src="/index.js"></script>
         </body>
