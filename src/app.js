@@ -10,6 +10,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+function protectWithPassword(req, res, next) {
+	res.set('WWW-Authenticate', 'Basic realm="Simple Todo App"');
+
+	if (
+		req.headers.authorization != process.env.BROWSER_AUTHENTICATION_STRING
+	) {
+		return res.status(401).send('Authentication required!');
+	}
+
+	next();
+}
+
+app.use(protectWithPassword);
+
 app.get('/', async (req, res) => {
 	const items = await mongodb.itemsCollection.find().toArray();
 
